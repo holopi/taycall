@@ -7,7 +7,7 @@ MY_NUMBER = ENV['MY_NUMBER']
 SPREADSHEET_ID = ENV['SPREADSHEET_ID']
 
 def spreadsheet_url
-  "https://spreadsheets.google.com/feeds/list/#{SPREADSHEET_ID}/od6/public/values?alt=json"
+  "https://spreadsheets.google.com/feeds/list/1GHln3W7Gm_0GZ_3xOoFz5HcEHLZXze9iYLnEojyuKr8/od6/public/values?alt=json"
 end
 
 def sanitize(number)
