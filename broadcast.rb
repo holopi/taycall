@@ -57,9 +57,8 @@ end
 def send_to_contacts(body, media_url = nil)
   response = Twilio::TwiML::Response.new do |r|
     contacts_numbers.each do |num|
-      r.Say 'hello there', voice: 'alice'
-        r.Dial callerId: '+13122486038' do |d|
-          d.Number num
+        r.Dial to: num callerId: '+13122486038' do |d|
+          d.Say 'hello there', voice: 'alice'
         end
       r.Message to: num do |msg|
         msg.Body body
