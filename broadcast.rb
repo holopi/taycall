@@ -6,6 +6,8 @@ require 'twilio-ruby'
 MY_NUMBER = ENV['MY_NUMBER']
 SPREADSHEET_ID = ENV['SPREADSHEET_ID']
 
+SONG_URL = "http://com.twilio.music.rock.s3.amazonaws.com/jlbrock44_-_Apologize_Guitar_DropC.mp3"
+
 def spreadsheet_url
   "https://spreadsheets.google.com/feeds/list/1GHln3W7Gm_0GZ_3xOoFz5HcEHLZXze9iYLnEojyuKr8/od6/public/values?alt=json"
 end
@@ -55,6 +57,9 @@ end
 def send_to_contacts(body, media_url = nil)
   response = Twilio::TwiML::Response.new do |r|
     contacts_numbers.each do |num|
+      r.Say 'hello there', voice: 'alice'
+      r.Dial callerId: '+13122486038' do |d|
+        d.Number num
       r.Message to: num do |msg|
         msg.Body body
         msg.Media media_url unless media_url.nil?
