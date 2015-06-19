@@ -66,7 +66,7 @@ post '/message' do
   twiml
 end
 
-get '/playsong' do
+post '/playsong' do
   response = Twilio::TwiML::Response.new do |r|
     r.Say "Hello Stranger"
     r.Play SONG_URL
@@ -92,8 +92,8 @@ def makecall(from)
   data = {
     :from => CALLER_ID,
     :to => from,
-    :url => "http://demo.twilio.com/docs/voice.xml"
-    #:url => BASE_URL + '/playsong',
+    #:url => "http://demo.twilio.com/docs/voice.xml"
+    :url => BASE_URL + "/playsong"
   }
 
   begin
