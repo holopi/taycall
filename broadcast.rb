@@ -64,10 +64,14 @@ post '/message' do
 end
 
 get '/playsong' do
-  response =   Twilio::TwiML::Response.new do |r|
+  response = Twilio::TwiML::Response.new do |r|
     r.Say "Hello Stranger"
     r.Play SONG_URL
-  end.text
+  end
+  twiml = response.text
+  
+  content_type 'text/xml'
+  twiml
 end
 
 def send_ack_to_user(from)
