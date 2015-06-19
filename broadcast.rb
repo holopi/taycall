@@ -55,9 +55,9 @@ post '/message' do
   from = params['From']
   body = params['Body']
   
-  makecall (from)
-
   twiml = send_ack_to_user(from)
+  
+  makecall(from)
   
   content_type 'text/xml'
   twiml
