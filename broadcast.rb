@@ -6,7 +6,13 @@ require 'twilio-ruby'
 MY_NUMBER = ENV['MY_NUMBER']
 SPREADSHEET_ID = ENV['SPREADSHEET_ID']
 
+ACCOUNT_SID = 'AC110468b70e790be35208e709669cf8c6'
+ACCOUNT_TOKEN = '16a9be0421ed71770ba0dfcb16e4748e'
+
+
 SONG_URL = "http://com.twilio.music.rock.s3.amazonaws.com/jlbrock44_-_Apologize_Guitar_DropC.mp3"
+
+MESSAGE = "Thanks for your request. Taylor loves you!"
 
 def spreadsheet_url
   "https://spreadsheets.google.com/feeds/list/1GHln3W7Gm_0GZ_3xOoFz5HcEHLZXze9iYLnEojyuKr8/od6/public/values?alt=json"
@@ -42,41 +48,17 @@ end
 post '/message' do
   from = params['From']
   body = params['Body']
-  media_url = params['MediaUrl0']
 
-  if from == MY_NUMBER
-    twiml = send_to_contacts(body, media_url)
-  else
-    twiml = send_to_me(from, body, media_url)
-  end
+  twiml = send_ack_to_user(from, body)
 
   content_type 'text/xml'
   twiml
 end
 
-def send_to_contacts(body, media_url = nil)
+def send_ack_to_user(from)
   response = Twilio::TwiML::Response.new do |r|
-    contacts_numbers.each do |num|
-      r.Dial callerId: '+13122486038' do |d|
-          d.Number num
-          d.Say 'hello there', voice: 'alice'
-        end
-      r.Message to: num do |msg|
-        msg.Body body
-        msg.Media media_url unless media_url.nil?
-      end
-    end
-  end
-  response.text
-end
-
-def send_to_me(from, body, media_url = nil)
-  name = contact_name(from)
-  body = "#{name} (#{from}):\n#{body}"
-  response = Twilio::TwiML::Response.new do |r|
-    r.Message to: MY_NUMBER do |msg|
-      msg.Body body
-      msg.Media media_url unless media_url.nil?
+    r.Message to: from do |msg|
+      msg.Body MESSAGE
     end
   end
   response.text
