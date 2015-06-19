@@ -16,7 +16,7 @@ BASE_URL = "https://young-inlet-5522.herokuapp.com"
 # Outgoing Caller ID you have previously validated with Twilio
 CALLER_ID = '+13122486038'
 
-SONG_URL = "http://com.twilio.music.rock.s3.amazonaws.com/jlbrock44_-_Apologize_Guitar_DropC.mp3"
+SONG_URL = "https://s3-us-west-1.amazonaws.com/taylor-swift-songs/Taylor+Swift+-+Blank+Space.mp3"
 
 MESSAGE = "Thanks for your request. Taylor loves you!"
 
@@ -68,7 +68,7 @@ end
 
 post '/playsong' do
   response = Twilio::TwiML::Response.new do |r|
-    r.Say "Hello Stranger"
+    r.Say "Blank Spaces. By Taylor Swift."
     r.Play SONG_URL
   end
   twiml = response.text
