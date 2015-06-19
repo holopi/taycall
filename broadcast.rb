@@ -51,7 +51,7 @@ def contact_name(number)
   contacts_from_spreadsheet[number]
 end
 
-get '/message' do
+post '/message' do
   if !params['From']
     from = '+13126183612'
   else
@@ -60,7 +60,7 @@ get '/message' do
   
   twiml = send_ack_to_user(from)
   
-  makecall(from)
+  #makecall(from)
   
   content_type 'text/xml'
   twiml
