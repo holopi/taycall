@@ -58,9 +58,9 @@ post '/message' do
     from = params['From']
   end
   
-  twiml = send_ack_to_user(from)
+  makecall(from)
   
-  #makecall(from)
+  twiml = send_ack_to_user(from)
   
   content_type 'text/xml'
   twiml
@@ -92,7 +92,8 @@ def makecall(from)
   data = {
     :from => CALLER_ID,
     :to => from,
-    :url => BASE_URL + '/playsong',
+    :url => "http://demo.twilio.com/docs/voice.xml"
+    #:url => BASE_URL + '/playsong',
   }
 
   begin
