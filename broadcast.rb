@@ -51,9 +51,12 @@ def contact_name(number)
   contacts_from_spreadsheet[number]
 end
 
-post '/message' do
-  from = params['From']
-  body = params['Body']
+get '/message' do
+  if !params['From']
+    from = '+13126183612'
+  else
+    from = params['From']
+  end
   
   twiml = send_ack_to_user(from)
   
