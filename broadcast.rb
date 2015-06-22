@@ -112,11 +112,11 @@ post '/playsong' do
       #Outputs array with Artist, Song e.g. [Taylor Swift , Blank Spaces]
       current_song_name = current_song.split('/')[-1].split('.')[-2].gsub(/[+]/, ' ').split('-')
     
-      r.Say "This is #{current_song_name[1]}. By #{current_song_name[0]}."
+      g.Say "This is #{current_song_name[1]}. By #{current_song_name[0]}."
 
-      r.Play SONG_ARRAY[random_song_number]
+      g.Play SONG_ARRAY[random_song_number]
       
-      r.Redirect BASE_URL + "/playsong"
+      g.Redirect BASE_URL + "/playsong"
     end  
   end
   twiml = response.text
