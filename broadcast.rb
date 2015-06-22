@@ -148,7 +148,7 @@ def makecall(from)
   }
   
   begin
-  @client =  Twilio::REST::Client.new(ACCOUNT_SID, ACCOUNT_TOKEN)
+  @client = Twilio::REST::Client.new ACCOUNT_SID, ACCOUNT_TOKEN
   sms = @client.account.sms.messages.create(:body => MESSAGE,
       :to => from,
       :from => MY_NUMBER)
