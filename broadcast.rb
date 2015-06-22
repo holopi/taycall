@@ -143,14 +143,14 @@ def makecall(user_number)
   
   @client.account.sms.messages.create(:body => MESSAGE,
   :to => user_number,
-  :from => MY_NUMBER)
+  :from => CALLER_ID)
   
   song_list = ""
   SONG_ARRAY.each_with_index {|val, index| song_list +=  "#{index}: #{val.split('/')[-1].split('.')[-2].gsub(/[+]/, ' ')} \n" }
   
   @client.account.sms.messages.create(:body => song_list,
   :to => user_number,
-  :from => MY_NUMBER)
+  :from => CALLER_ID)
   
   @call = @client.account.calls.create(
     :from => CALLER_ID,   # From your Twilio number
