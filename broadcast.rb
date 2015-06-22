@@ -105,7 +105,7 @@ post '/playsong' do
       if !params['Digits']
         song_number = rand(SONG_ARRAY.length)
       else
-        song_number = params['Digits']
+        song_number = params['Digits'].to_i
       end
       current_song = SONG_ARRAY[song_number]
   
