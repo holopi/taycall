@@ -114,7 +114,7 @@ post '/playsong' do
     
       g.Say "This is #{current_song_name[1]}. By #{current_song_name[0]}."
 
-      g.Play SONG_ARRAY[random_song_number]
+      g.Play current_song
       
       g.Redirect BASE_URL + "/playsong"
     end  
