@@ -16,7 +16,26 @@ BASE_URL = "https://young-inlet-5522.herokuapp.com"
 # Outgoing Caller ID you have previously validated with Twilio
 CALLER_ID = '+13122486038'
 
-SONG_URL = "https://s3-us-west-1.amazonaws.com/taylor-swift-songs/Taylor+Swift+-+Blank+Space.mp3"
+SONG_ARRAY = [
+  "http://taylor-swift-songs.s3.amazonaws.com/Taylor+Swift+-+Blank+Space.mp3",
+  "http://taylor-swift-songs.s3.amazonaws.com/Taylor+Swift+-+Shake+It+Off.mp3",
+  "http://taylor-swift-songs.s3.amazonaws.com/Taylor+Swift+-+Style.mp3",
+  "http://taylor-swift-songs.s3.amazonaws.com/Taylor+Swift+-+Bad+Blood.mp3",
+  "http://taylor-swift-songs.s3.amazonaws.com/Taylor+Swift+-+I+Knew+You+Were+Trouble.mp3",
+  "http://taylor-swift-songs.s3.amazonaws.com/Taylor+Swift+-+We+Are+Never+Ever+Getting+Back+Together.mp3",
+  "http://taylor-swift-songs.s3.amazonaws.com/Taylor+Swift+-+You+Belong+With+Me.mp3",
+  "http://taylor-swift-songs.s3.amazonaws.com/Taylor+Swift+-+Love+Story.mp3",
+  "http://taylor-swift-songs.s3.amazonaws.com/Taylor+Swift+-+Teardrops+On+My+Guitar.mp3",
+  "http://taylor-swift-songs.s3.amazonaws.com/Taylor+Swift+-+Fifteen.mp3",
+  "http://taylor-swift-songs.s3.amazonaws.com/Taylor+Swift+-+Back+To+December.mp3",
+  "http://taylor-swift-songs.s3.amazonaws.com/Taylor+Swift+-+22.mp3",
+  "http://taylor-swift-songs.s3.amazonaws.com/Taylor+Swift+-+Picture+To+Burn.mp3",
+  "http://taylor-swift-songs.s3.amazonaws.com/Taylor+Swift+-+Our+Song.mp3",
+  "http://taylor-swift-songs.s3.amazonaws.com/Taylor+Swift+-+Mine.mp3",
+  "http://taylor-swift-songs.s3.amazonaws.com/Taylor+Swift+-+White+Horse.mp3",
+  "http://taylor-swift-songs.s3.amazonaws.com/Taylor+Swift+-+Everything+Has+Changed.mp3",
+  "http://taylor-swift-songs.s3.amazonaws.com/Taylor+Swift+-+Mean.mp3",
+]
 
 MESSAGE = "Thanks for your request. Taylor loves you!"
 
@@ -58,9 +77,9 @@ post '/message' do
     from = params['From']
   end
   
-  makecall(from)
-  
   twiml = send_ack_to_user(from)
+  
+  makecall(from)
   
   content_type 'text/xml'
   twiml
@@ -68,8 +87,19 @@ end
 
 post '/playsong' do
   response = Twilio::TwiML::Response.new do |r|
-    r.Say "Blank Spaces. By Taylor Swift."
-    r.Play SONG_URL
+    r.Pause
+    r.Say "Welcome to TayCalls."
+    r.Pause
+    r.Say "You can change the song at any time by enter the song number. A song list has been sent to you via SMS."
+    random_song_number = rand(SONG_ARRAY.length)
+    current_song = SONG_ARRAY[random_song_number]
+    
+    #Outputs array with Artist, Song e.g. [Taylor Swift , Blank Spaces]
+    current_song_name = current_song.split('/')[-1].split('.')[-2].gsub(/[+]/, ' ').split('-')
+    
+    r.Say "This is #{current_song_name[1]}. By #{current_song_name[0]}."
+
+    r.Play SONG_ARRAY[random_song_number]
   end
   twiml = response.text
   
