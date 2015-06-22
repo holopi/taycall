@@ -77,12 +77,12 @@ post '/message' do
     from = params['From']
   end
   
-  #twiml = send_ack_to_user(from)
+  twiml = send_ack_to_user(from)
   
   makecall(from)
   
-  #content_type 'text/xml'
-  #twiml
+  content_type 'text/xml'
+  twiml
 end
 
 post '/initiatecall' do
