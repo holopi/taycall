@@ -138,32 +138,25 @@ def send_ack_to_user(from)
 end
 
 # Use the Twilio REST API to initiate an outgoing call
-def makecall(from)
-  # parameters sent to Twilio REST API
-  data = {
-    :from => CALLER_ID,
-    :to => from,
-    #:url => "http://demo.twilio.com/docs/voice.xml"
-    :url => BASE_URL + "/initiatecall"
-  }
-  
+def makecall(user_number)
+  @client = Twilio::REST::Client.new ACCOUNT_SID, ACCOUNT_TOKEN
+ 
   song_list = ""
   SONG_ARRAY.each_with_index {|val, index| song_list +=  "#{index}: #{val.split('/')[-1].split('.')[-2].gsub(/[+]/, ' ')} \n" }
-
-  begin
-    client = Twilio::REST::Client.new(ACCOUNT_SID, ACCOUNT_TOKEN)
-    client.account.sms.messages.create(:body => MESSAGE,
-    :to => from,
-    :from => MY_NUMBER)
-    client.account.sms.messages.create(:body => song_list,
-    :to => from,
-    :from => MY_NUMBER)
-    client.account.calls.create data
-  rescue StandardError => bang
-    redirect_to :action => '.', 'msg' => "Error #{bang}"
-    return
-  end
-
-  redirect_to :action => '', 'msg' => "Calling #{from}..."
+ 
+  @client.account.sms.messages.create(:body => MESSAGE,
+  :to => user_number,
+  :from => MY_NUMBER)
+  @client.account.sms.messages.create(:body => song_list,
+  :to => user_number,
+  :from => MY_NUMBER)
+  
+  @call = @client.account.calls.create(
+    :from => CALLER_ID,   # From your Twilio number
+    :to => user_number,     # To any number
+    # Fetch instructions from this URL when the call connects
+    :url => BASE_URL + "/initiatecall"
+  )
+    
 end
 # @end snippet
