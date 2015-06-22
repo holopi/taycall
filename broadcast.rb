@@ -85,6 +85,9 @@ end
 
 post '/interstitial' do
   makecall(from)
+  
+  content_type 'text/xml'
+  ''
 end
 
 post '/initiatecall' do
