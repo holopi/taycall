@@ -88,8 +88,8 @@ end
 post '/initiatecall' do
   response = Twilio::TwiML::Response.new do |r|
     r.Pause
-    r.Say "Welcome to TayCalls."
-    r.Say "Change the song at any time by entering a song number. A full song list has been sent to you via SMS."
+    r.Say :voice => 'woman' "Welcome to TayCalls."
+    r.Say :voice => 'woman' "Change the song at any time by entering a song number. A full song list has been sent to you via SMS."
     r.Redirect BASE_URL + "/playsong"
   end
   twiml = response.text
@@ -112,9 +112,9 @@ post '/playsong' do
       #Outputs array with Artist, Song e.g. [Taylor Swift , Blank Spaces]
       current_song_name = current_song.split('/')[-1].split('.')[-2].gsub(/[+]/, ' ').split('-')
     
-      g.Say "This is #{current_song_name[1]}. By #{current_song_name[0]}."
+      g.Say :voice => 'woman' "This is #{current_song_name[1]}. By #{current_song_name[0]}."
 
-      g.Play current_song
+      g.Play :voice => 'woman' current_song
       
       g.Redirect BASE_URL + "/playsong"
     end  
