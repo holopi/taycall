@@ -78,7 +78,7 @@ post '/message' do
     from = params['From']
   end
   
-  #makecall(from)
+  makecall(from)
   
   twiml = send_ack_to_user(from)
   
