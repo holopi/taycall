@@ -107,7 +107,16 @@ post '/playsong' do
       if !params['Digits']
         song_number = rand(SONG_ARRAY.length)
       else
-        song_number = params['Digits'].to_i
+        if !/\A\d+\z/.match(params['Digits'])
+          song_number = rand(SONG_ARRAY.length)
+          g.Say "You have entered an invalid song number. Playing a random song.", :voice => 'alice'
+        else
+          song_number = params['Digits'].to_i
+          if song_number >= SONG_ARRAY.length
+            song_number = rand(SONG_ARRAY.length)
+            g.Say "You have entered an invalid song number. Playing a random song.", :voice => 'alice'
+          end          
+        end
       end
       current_song = SONG_ARRAY[song_number]
   
@@ -117,7 +126,7 @@ post '/playsong' do
     
       g.Play current_song
       g.Say "That was #{current_song_name[1]}. By #{current_song_name[0]}.", :voice => 'alice'
-      g.Say "Enter a song number via your keypad to choose a new song now.", :voice => 'alice'
+      g.Say "Playing another random song. Enter a song number via your keypad to change the song at any time.", :voice => 'alice'
     end
     r.Redirect BASE_URL + "/playsong"
   end
@@ -153,10 +162,10 @@ def makecall(user_number)
   :from => CALLER_ID)
   
   @call = @client.account.calls.create(
-    :from => CALLER_ID,   # From your Twilio number
-    :to => user_number,     # To any number
-    # Fetch instructions from this URL when the call connects
-    :url => BASE_URL + "/initiatecall"
+  :from => CALLER_ID,   # From your Twilio number
+  :to => user_number,     # To any number
+  # Fetch instructions from this URL when the call connects
+  :url => BASE_URL + "/initiatecall"
   )
     
 end
