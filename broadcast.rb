@@ -148,7 +148,7 @@ def makecall(user_number)
   song_list = ""
   SONG_ARRAY.each_with_index {|val, index| song_list +=  "#{index}: #{val.split('/')[-1].split('.')[-2].gsub(/[+]/, ' ')} \n" }
   
-  @client.account.sms.messages.create(:body => song_list,
+  @client.account.sms.messages.create(:body => song_list[0...140],
   :to => user_number,
   :from => CALLER_ID)
   
