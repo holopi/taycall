@@ -146,21 +146,18 @@ def makecall(from)
     #:url => "http://demo.twilio.com/docs/voice.xml"
     :url => BASE_URL + "/initiatecall"
   }
-  =begin
-  @client = Twilio::REST::Client.new ACCOUNT_SID, ACCOUNT_TOKEN
-  sms = @client.account.sms.messages.create(:body => MESSAGE,
-      :to => from,
-      :from => MY_NUMBER)
-  puts sms.from
+  
   song_list = ""
   SONG_ARRAY.each_with_index {|val, index| song_list +=  "#{index}: #{val.split('/')[-1].split('.')[-2].gsub(/[+]/, ' ')} \n" }
-  sms2 = @client.account.sms.messages.create(:body => song_list,
-      :to => from,
-      :from => MY_NUMBER)
-  puts sms2.from
-  =end
+
   begin
     client = Twilio::REST::Client.new(ACCOUNT_SID, ACCOUNT_TOKEN)
+    client.account.sms.messages.create(:body => MESSAGE,
+    :to => from,
+    :from => MY_NUMBER)
+    client.account.sms.messages.create(:body => song_list,
+    :to => from,
+    :from => MY_NUMBER)
     client.account.calls.create data
   rescue StandardError => bang
     redirect_to :action => '.', 'msg' => "Error #{bang}"
