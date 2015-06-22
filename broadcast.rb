@@ -77,9 +77,22 @@ post '/message' do
     from = params['From']
   end
   
-  twiml = send_ack_to_user(from)
+  #twiml = send_ack_to_user(from)
   
   makecall(from)
+  
+  #content_type 'text/xml'
+  #twiml
+end
+
+post '/initiatecall' do
+  response = Twilio::TwiML::Response.new do |r|
+    r.Pause
+    r.Say "Welcome to TayCalls."
+    r.Say "Change the song at any time by enter a song number. A full song list has been sent to you via SMS."
+    r.Redirect BASE_URL + "/playsong"
+  end
+  twiml = response.text
   
   content_type 'text/xml'
   twiml
@@ -87,16 +100,13 @@ end
 
 post '/playsong' do
   response = Twilio::TwiML::Response.new do |r|
-    r.Pause
-    r.Say "Welcome to TayCalls."
-    r.Pause
-    r.Say "You can change the song at any time by enter the song number. A song list has been sent to you via SMS."
+  
     random_song_number = rand(SONG_ARRAY.length)
     current_song = SONG_ARRAY[random_song_number]
-    
+  
     #Outputs array with Artist, Song e.g. [Taylor Swift , Blank Spaces]
     current_song_name = current_song.split('/')[-1].split('.')[-2].gsub(/[+]/, ' ').split('-')
-    
+  
     r.Say "This is #{current_song_name[1]}. By #{current_song_name[0]}."
 
     r.Play SONG_ARRAY[random_song_number]
@@ -106,6 +116,7 @@ post '/playsong' do
   content_type 'text/xml'
   twiml
 end
+
 
 def send_ack_to_user(from)
   response = Twilio::TwiML::Response.new do |r|
@@ -123,7 +134,7 @@ def makecall(from)
     :from => CALLER_ID,
     :to => from,
     #:url => "http://demo.twilio.com/docs/voice.xml"
-    :url => BASE_URL + "/playsong"
+    :url => BASE_URL + "/initiatecall"
   }
 
   begin
