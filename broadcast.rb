@@ -80,10 +80,10 @@ post '/message' do
   
   makecall(user_number)
   
-  twiml = send_ack_to_user(user_number)
+  #twiml = send_ack_to_user(user_number)
   
   content_type 'text/xml'
-  twiml
+  ""
 end
 
 post '/initiatecall' do
