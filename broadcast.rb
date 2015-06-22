@@ -89,8 +89,11 @@ post '/initiatecall' do
   response = Twilio::TwiML::Response.new do |r|
     r.Pause
     r.Say "Welcome to TayCall.", :voice => 'alice'
+    r.Sms "Welcome to TayCall. Change the song at any time by entering a song number. Here's the full song list:"
+    song_list = ""
+    SONG_ARRAY.each_with_index {|val, index| song_list +=  "#{index}: #{val.split('/')[-1].split('.')[-2].gsub(/[+]/, ' ')} \n" }
+    r.Sms song_list
     r.Say "Change the song at any time by entering a song number. A full song list has been sent to you via SMS.", :voice => 'alice'
-    r.Sms "Thanks for texting TayCall. Change the song at any time by entering a song number. Here's the full song list:"
     r.Say "We will start by playing a random song.", :voice => 'alice'
     r.Redirect BASE_URL + "/playsong"
   end
@@ -103,7 +106,7 @@ end
 post '/playsong' do
   response = Twilio::TwiML::Response.new do |r|
     
-    r.Gather :numDigits => '1', :timeout => '300' do |g|
+    r.Gather :numDigits => '1', :timeout => '180' do |g|
       if !params['Digits']
         song_number = rand(SONG_ARRAY.length)
       else
