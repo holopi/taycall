@@ -37,7 +37,8 @@ SONG_ARRAY = [
   "http://taylor-swift-songs.s3.amazonaws.com/Taylor+Swift+-+Mean.mp3",
 ]
 
-MESSAGE = "Thanks for your request. Taylor loves you!"
+MESSAGE = "Welcome to TayCall. Change the song at any time by entering a song number. Here's the full song list:"
+
 
 def spreadsheet_url
   "https://spreadsheets.google.com/feeds/list/1GHln3W7Gm_0GZ_3xOoFz5HcEHLZXze9iYLnEojyuKr8/od6/public/values?alt=json"
@@ -89,10 +90,6 @@ post '/initiatecall' do
   response = Twilio::TwiML::Response.new do |r|
     r.Pause
     r.Say "Welcome to TayCall.", :voice => 'alice'
-    r.Sms "Welcome to TayCall. Change the song at any time by entering a song number. Here's the full song list:"
-    song_list = ""
-    SONG_ARRAY.each_with_index {|val, index| song_list +=  "#{index}: #{val.split('/')[-1].split('.')[-2].gsub(/[+]/, ' ')} \n" }
-    r.Sms song_list
     r.Say "Change the song at any time by entering a song number. A full song list has been sent to you via SMS.", :voice => 'alice'
     r.Say "We will start by playing a random song.", :voice => 'alice'
     r.Redirect BASE_URL + "/playsong"
@@ -149,6 +146,20 @@ def makecall(from)
     #:url => "http://demo.twilio.com/docs/voice.xml"
     :url => BASE_URL + "/initiatecall"
   }
+  
+  begin
+  @client =  Twilio::REST::Client.new(ACCOUNT_SID, ACCOUNT_TOKEN)
+  sms = @client.account.sms.messages.create(:body => MESSAGE,
+      :to => from,
+      :from => MY_NUMBER)
+  puts sms.from
+  song_list = ""
+  SONG_ARRAY.each_with_index {|val, index| song_list +=  "#{index}: #{val.split('/')[-1].split('.')[-2].gsub(/[+]/, ' ')} \n" }
+  sms2 = @client.account.sms.messages.create(:body => song_list,
+      :to => from,
+      :from => MY_NUMBER)
+  puts sms2.from
+  end
 
   begin
     client = Twilio::REST::Client.new(ACCOUNT_SID, ACCOUNT_TOKEN)
