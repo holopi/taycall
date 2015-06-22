@@ -73,14 +73,14 @@ end
 
 post '/message' do
   if !params['From']
-    from = '+13126183612'
+    user_number = '+13126183612'
   else
-    from = params['From']
+    user_number = params['From']
   end
   
-  makecall(from)
+  makecall(user_number)
   
-  twiml = send_ack_to_user(from)
+  twiml = send_ack_to_user(user_number)
   
   content_type 'text/xml'
   twiml
@@ -128,9 +128,9 @@ post '/playsong' do
 end
 
 
-def send_ack_to_user(from)
+def send_ack_to_user(user_number)
   response = Twilio::TwiML::Response.new do |r|
-    r.Message to: from do |msg|
+    r.Message to: user_number do |msg|
       msg.Body MESSAGE
     end
   end
