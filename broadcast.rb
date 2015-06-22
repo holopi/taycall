@@ -81,7 +81,9 @@ post '/message' do
     
   content_type 'text/xml'
   twiml
-  
+end
+
+post '/interstitial' do
   makecall(from)
 end
 
@@ -131,6 +133,7 @@ def send_ack_to_user(from)
     r.Message to: from do |msg|
       msg.Body MESSAGE
     end
+    r.Redirect BASE_URL + "/interstitial"
   end
   response.text
 end
