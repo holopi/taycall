@@ -101,7 +101,7 @@ end
 post '/playsong' do
   response = Twilio::TwiML::Response.new do |r|
     
-    r.Gather :numDigits => '1', timeout ==> 600 do |g|
+    r.Gather :numDigits => '1', timeout => 600 do |g|
       if !params['Digits']
         song_number = rand(SONG_ARRAY.length)
       else
