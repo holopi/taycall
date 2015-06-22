@@ -90,6 +90,7 @@ post '/initiatecall' do
     r.Pause
     r.Say "Welcome to TayCalls.", :voice => 'woman'
     r.Say "Change the song at any time by entering a song number. A full song list has been sent to you via SMS.", :voice => 'woman'
+    r.Say "We will start by playing a random song.", :voice => 'woman'
     r.Redirect BASE_URL + "/playsong"
   end
   twiml = response.text
@@ -112,7 +113,6 @@ post '/playsong' do
       #Outputs array with Artist, Song e.g. [Taylor Swift , Blank Spaces]
       current_song_name = current_song.split('/')[-1].split('.')[-2].gsub(/[+]/, ' ').split('-')
     
-      g.Say "This is #{current_song_name[1]}. By #{current_song_name[0]}.", :voice => 'woman'
       g.Play current_song
       g.Say "That was #{current_song_name[1]}. By #{current_song_name[0]}.", :voice => 'woman'
       g.Say "Choose another song by entering a song number.", :voice => 'woman'
