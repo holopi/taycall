@@ -37,7 +37,7 @@ SONG_ARRAY = [
   "http://taylor-swift-songs.s3.amazonaws.com/Taylor+Swift+-+Mean.mp3",
 ]
 
-MESSAGE = "Welcome to TayCall. Change the song at any time by entering a song number. Here's the full song list:"
+WELCOME_MESSAGE = "Welcome to TayCall. Change the song at any time by entering a song number. Here's the full song list:"
 
 
 def spreadsheet_url
@@ -131,7 +131,7 @@ end
 def send_ack_to_user(user_number)
   response = Twilio::TwiML::Response.new do |r|
     r.Message to: user_number do |msg|
-      msg.Body MESSAGE
+      msg.Body WELCOME_MESSAGE
     end
   end
   response.text
@@ -140,7 +140,11 @@ end
 # Use the Twilio REST API to initiate an outgoing call
 def makecall(user_number)
   @client = Twilio::REST::Client.new ACCOUNT_SID, ACCOUNT_TOKEN
-    
+  
+  @client.account.messages.create(:body => WELCOME_MESSAGE,
+  :to => user_number,
+  :from => CALLER_ID)
+  
   song_list = ""
   SONG_ARRAY.each_with_index {|val, index| song_list +=  "#{index}: #{val.split('/')[-1].split('.')[-2].gsub(/[+]/, ' ')} \n" }
   
