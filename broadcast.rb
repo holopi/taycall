@@ -112,6 +112,7 @@ post '/playsong' do
   
       #Outputs array with Artist, Song e.g. [Taylor Swift , Blank Spaces]
       current_song_name = current_song.split('/')[-1].split('.')[-2].gsub(/[+]/, ' ').split('-')
+      g.Say "Palying #{current_song_name[1]}. By #{current_song_name[0]}.", :voice => 'alice'
     
       g.Play current_song
       g.Say "That was #{current_song_name[1]}. By #{current_song_name[0]}.", :voice => 'alice'
