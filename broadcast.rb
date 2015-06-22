@@ -78,11 +78,11 @@ post '/message' do
   end
   
   twiml = send_ack_to_user(from)
-  
-  makecall(from)
-  
+    
   content_type 'text/xml'
   twiml
+  
+  makecall(from)
 end
 
 post '/initiatecall' do
@@ -113,10 +113,10 @@ post '/playsong' do
       current_song_name = current_song.split('/')[-1].split('.')[-2].gsub(/[+]/, ' ').split('-')
     
       g.Say "This is #{current_song_name[1]}. By #{current_song_name[0]}.", :voice => 'woman'
-
       g.Play current_song
+      g.Say "That was #{current_song_name[1]}. By #{current_song_name[0]}.", :voice => 'woman'
+      g.Say "Choose another song by entering a song number.", :voice => 'woman'
       
-      g.Redirect BASE_URL + "/playsong"
     end  
   end
   twiml = response.text
