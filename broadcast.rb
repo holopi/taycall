@@ -89,7 +89,7 @@ post '/initiatecall' do
   response = Twilio::TwiML::Response.new do |r|
     r.Pause
     r.Say "Welcome to TayCalls."
-    r.Say "Change the song at any time by enter a song number. A full song list has been sent to you via SMS."
+    r.Say "Change the song at any time by entering a song number. A full song list has been sent to you via SMS."
     r.Redirect BASE_URL + "/playsong"
   end
   twiml = response.text
@@ -100,16 +100,24 @@ end
 
 post '/playsong' do
   response = Twilio::TwiML::Response.new do |r|
+    
+    r.Gather :numDigits => '1', timeout ==> 600 do |g|
+      if !params['Digits']
+        song_number = rand(SONG_ARRAY.length)
+      else
+        song_number = params['Digits']
+      end
+      current_song = SONG_ARRAY[song_number]
   
-    random_song_number = rand(SONG_ARRAY.length)
-    current_song = SONG_ARRAY[random_song_number]
-  
-    #Outputs array with Artist, Song e.g. [Taylor Swift , Blank Spaces]
-    current_song_name = current_song.split('/')[-1].split('.')[-2].gsub(/[+]/, ' ').split('-')
-  
-    r.Say "This is #{current_song_name[1]}. By #{current_song_name[0]}."
+      #Outputs array with Artist, Song e.g. [Taylor Swift , Blank Spaces]
+      current_song_name = current_song.split('/')[-1].split('.')[-2].gsub(/[+]/, ' ').split('-')
+    
+      r.Say "This is #{current_song_name[1]}. By #{current_song_name[0]}."
 
-    r.Play SONG_ARRAY[random_song_number]
+      r.Play SONG_ARRAY[random_song_number]
+      
+      r.Redirect BASE_URL + "/playsong"
+      
   end
   twiml = response.text
   
