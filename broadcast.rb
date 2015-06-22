@@ -147,7 +147,6 @@ def makecall(from)
     :url => BASE_URL + "/initiatecall"
   }
   
-  begin
   @client = Twilio::REST::Client.new ACCOUNT_SID, ACCOUNT_TOKEN
   sms = @client.account.sms.messages.create(:body => MESSAGE,
       :to => from,
@@ -159,7 +158,6 @@ def makecall(from)
       :to => from,
       :from => MY_NUMBER)
   puts sms2.from
-  end
 
   begin
     client = Twilio::REST::Client.new(ACCOUNT_SID, ACCOUNT_TOKEN)
