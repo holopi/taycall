@@ -37,7 +37,7 @@ SONG_ARRAY = [
   "http://taylor-swift-songs.s3.amazonaws.com/Taylor+Swift+-+Mean.mp3",
 ]
 
-WELCOME_MESSAGE = "Welcome to TayCall. Enter a song number via your keypad to change the song at any time. Here's the full song list:"
+WELCOME_MESSAGE = "Welcome to TayCall, where Taylor Swift calls you with her songs. Enter a song number via your keypad to change the song at any time. Here's the full song list:"
 
 
 def spreadsheet_url
@@ -87,7 +87,7 @@ end
 post '/initiatecall' do
   response = Twilio::TwiML::Response.new do |r|
     r.Pause
-    r.Say "Welcome to TayCall.", :voice => 'alice'
+    r.Say "Welcome to TayCall, where Taylor Swift calls you with her songs.", :voice => 'alice'
     r.Say "Enter a song number via your keypad to change the song at any time. A full song list has been sent to you via SMS.", :voice => 'alice'
     r.Say "We will start by playing a random song.", :voice => 'alice'
     r.Redirect BASE_URL + "/playsong"
