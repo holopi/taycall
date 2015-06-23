@@ -137,6 +137,13 @@ end
 # Use the Twilio REST API to initiate an outgoing call
 def makecall(user_number, message_from_user)
   @client = Twilio::REST::Client.new ACCOUNT_SID, ACCOUNT_TOKEN
+    
+  @call = @client.account.calls.create(
+  :from => CALLER_ID,   # From your Twilio number
+  :to => user_number,     # To any number
+  # Fetch instructions from this URL when the call connects
+  :url => BASE_URL + "/initiatecall"
+  )
   
   @client.account.messages.create(:body => WELCOME_MESSAGE,
   :to => user_number,
@@ -148,13 +155,6 @@ def makecall(user_number, message_from_user)
   @client.account.messages.create(:body => song_list,
   :to => user_number,
   :from => CALLER_ID)
-  
-  @call = @client.account.calls.create(
-  :from => CALLER_ID,   # From your Twilio number
-  :to => user_number,     # To any number
-  # Fetch instructions from this URL when the call connects
-  :url => BASE_URL + "/initiatecall"
-  )
     
 end
 # @end snippet
