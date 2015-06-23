@@ -98,42 +98,6 @@ post '/initiatecall' do
   twiml
 end
 
-get '/playsong' do
-  response = Twilio::TwiML::Response.new do |r|
-    
-    r.Gather :numDigits => '2', :timeout => '1' do |g|
-      if !params['Digits']
-        song_number = rand(SONG_ARRAY.length)
-      else
-        if !/\A\d+\z/.match(params['Digits'])
-          song_number = rand(SONG_ARRAY.length)
-          g.Say "You have entered an invalid song number. Playing a random song.", :voice => 'alice'
-        else
-          song_number = params['Digits'].to_i
-          if song_number >= SONG_ARRAY.length
-            song_number = rand(SONG_ARRAY.length)
-            g.Say "You have entered an invalid song number. Playing a random song.", :voice => 'alice'
-          end          
-        end
-      end
-      current_song = SONG_ARRAY[song_number]
-  
-      #Outputs array with Artist, Song e.g. [Taylor Swift , Blank Spaces]
-      current_song_name = current_song.split('/')[-1].split('.')[-2].gsub(/[+]/, ' ').split('-')
-      g.Say "This is #{current_song_name[1]}. By #{current_song_name[0]}.", :voice => 'alice'
-    
-      g.Play current_song
-      g.Say "That was #{current_song_name[1]}. By #{current_song_name[0]}.", :voice => 'alice'
-      g.Say "Playing another random song. Enter a song number via your keypad to change the song at any time.", :voice => 'alice'
-    end
-    r.Redirect BASE_URL + "/playsong"
-  end
-  twiml = response.text
-  
-  content_type 'text/xml'
-  twiml
-end
-
 post '/playsong' do
   response = Twilio::TwiML::Response.new do |r|
     
@@ -202,7 +166,7 @@ def makecall(user_number, message_from_user)
     :to => user_number,
     :from => CALLER_ID)
   else
-    @client.account.messages.create(:body => "Hello you've specified song #{specified_song_number}",
+    @client.account.messages.create(:body => "You've specificed song #{specified_song_number}. Unforturnately, we don't support requests via SMS. Calling you now...",
     :to => user_number,
     :from => CALLER_ID)
     
@@ -210,8 +174,7 @@ def makecall(user_number, message_from_user)
     :from => CALLER_ID,   # From your Twilio number
     :to => user_number,     # To any number
     # Fetch instructions from this URL when the call connects
-    :url => BASE_URL + "/playsong&Digits=#{specified_song_number}",
-    :method => "GET"
+    :url => BASE_URL + "/initiatecall"
     )
   end
   
