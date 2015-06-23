@@ -166,17 +166,9 @@ def makecall(user_number, message_from_user)
     :to => user_number,
     :from => CALLER_ID)
   else
-    @client.account.messages.create(:body => "You've specificed song #{specified_song_number}. Unforturnately, we don't support requests via SMS. Calling you now...",
+    @client.account.messages.create(:body => "You've specificed song #{specified_song_number}. Unforturnately, we don't support requests via SMS. Please text \"START\" to listen in.",
     :to => user_number,
     :from => CALLER_ID)
-    
-    @call = @client.account.calls.create(
-    :from => CALLER_ID,   # From your Twilio number
-    :to => user_number,     # To any number
-    # Fetch instructions from this URL when the call connects
-    :url => BASE_URL + "/initiatecall"
-    )
   end
-  
 end
 # @end snippet
