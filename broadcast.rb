@@ -140,10 +140,7 @@ def makecall(user_number, message_from_user)
     
   if message_from_user
     if /\A\d+\z/.match(message_from_user)
-      song_number = message_from_user.to_i
-      if song_number < SONG_ARRAY.length
-        specified_song_number = song_number
-      end          
+      specified_song_number = message_from_user.to_i
     end
   end
     
@@ -166,7 +163,7 @@ def makecall(user_number, message_from_user)
     :to => user_number,
     :from => CALLER_ID)
   else
-    @client.account.messages.create(:body => "You've specificed song #{specified_song_number}. Unforturnately, we don't support requests via SMS. Please text \"Start\" to listen in.",
+    @client.account.messages.create(:body => "Hi. We currently do not support song requests via SMS. Please enter the song number via your keypad during the call.",
     :to => user_number,
     :from => CALLER_ID)
   end
