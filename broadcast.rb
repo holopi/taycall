@@ -166,7 +166,7 @@ def makecall(user_number, message_from_user)
     :to => user_number,
     :from => CALLER_ID)
   else
-    @client.account.messages.create(:body => "You've specificed song #{specified_song_number}. Unforturnately, we don't support requests via SMS. Please text \"START\" to listen in.",
+    @client.account.messages.create(:body => "You've specificed song #{specified_song_number}. Unforturnately, we don't support requests via SMS. Please text \"Start\" to listen in.",
     :to => user_number,
     :from => CALLER_ID)
   end
