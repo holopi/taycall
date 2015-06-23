@@ -138,23 +138,38 @@ end
 def makecall(user_number, message_from_user)
   @client = Twilio::REST::Client.new ACCOUNT_SID, ACCOUNT_TOKEN
     
-  @call = @client.account.calls.create(
-  :from => CALLER_ID,   # From your Twilio number
-  :to => user_number,     # To any number
-  # Fetch instructions from this URL when the call connects
-  :url => BASE_URL + "/initiatecall"
-  )
-  
-  @client.account.messages.create(:body => WELCOME_MESSAGE,
-  :to => user_number,
-  :from => CALLER_ID)
-  
-  song_list = ""
-  SONG_ARRAY.each_with_index {|val, index| song_list +=  "#{index}: #{val.split('/')[-1].split('.')[-2].gsub(/[+]/, ' ')} \n" }
-  
-  @client.account.messages.create(:body => song_list,
-  :to => user_number,
-  :from => CALLER_ID)
+  if message_from_user
+    if /\A\d+\z/.match(message_from_user)
+      song_number = message_from_user.to_i
+      if song_number < SONG_ARRAY.length
+        specified_song_number = song_number
+      end          
+    end
+  end
     
+  if !specified_song_number
+    @call = @client.account.calls.create(
+    :from => CALLER_ID,   # From your Twilio number
+    :to => user_number,     # To any number
+    # Fetch instructions from this URL when the call connects
+    :url => BASE_URL + "/initiatecall"
+    )
+  
+    @client.account.messages.create(:body => WELCOME_MESSAGE,
+    :to => user_number,
+    :from => CALLER_ID)
+  
+    song_list = ""
+    SONG_ARRAY.each_with_index {|val, index| song_list +=  "#{index}: #{val.split('/')[-1].split('.')[-2].gsub(/[+]/, ' ')} \n" }
+  
+    @client.account.messages.create(:body => song_list,
+    :to => user_number,
+    :from => CALLER_ID)
+  else
+    @client.account.messages.create(:body => "Hello you've specified song #{specified_song_number}",
+    :to => user_number,
+    :from => CALLER_ID)
+  end
+  
 end
 # @end snippet
