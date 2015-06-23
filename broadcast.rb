@@ -73,17 +73,15 @@ end
 
 post '/message' do
   if !params['From']
-    user_number = '+13126183612'
+    content_type 'text/xml'
+    ""
   else
     user_number = params['From']
+    message_from_user = params['Body']
+    makecall(user_number, message_from_user)  
+    content_type 'text/xml'
+    ""
   end
-  
-  makecall(user_number)
-  
-  #twiml = send_ack_to_user(user_number)
-  
-  content_type 'text/xml'
-  ""
 end
 
 post '/initiatecall' do
@@ -136,18 +134,8 @@ post '/playsong' do
   twiml
 end
 
-
-def send_ack_to_user(user_number)
-  response = Twilio::TwiML::Response.new do |r|
-    r.Message to: user_number do |msg|
-      msg.Body WELCOME_MESSAGE
-    end
-  end
-  response.text
-end
-
 # Use the Twilio REST API to initiate an outgoing call
-def makecall(user_number)
+def makecall(user_number, message_from_user)
   @client = Twilio::REST::Client.new ACCOUNT_SID, ACCOUNT_TOKEN
   
   @client.account.messages.create(:body => WELCOME_MESSAGE,
