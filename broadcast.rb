@@ -87,8 +87,8 @@ end
 post '/initiatecall' do
   response = Twilio::TwiML::Response.new do |r|
     r.Pause
-    r.Say "Welcome to TayCall, where Taylor Swift calls you with her songs.", :voice => 'alice'
-    r.Say "Enter a song number via your keypad to change the song at any time. A full song list has been sent to you via SMS.", :voice => 'alice'
+    r.Say "Welcome to TayCall.", :voice => 'alice'
+    r.Say "Enter a song number via your keypad to change the song. The full song list has been texted to you.", :voice => 'alice'
     r.Say "We will start by playing a random song.", :voice => 'alice'
     r.Redirect BASE_URL + "/playsong"
   end
